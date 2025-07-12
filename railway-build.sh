@@ -25,4 +25,10 @@ if [ -f "backend/composer.json" ]; then
     cd ..
 fi
 
+echo "🗄️ Setting up database schema..."
+# Run database setup script
+if [ -f "db/setup-database.php" ]; then
+    php db/setup-database.php
+fi
+
 echo "✅ Railway build complete!" 

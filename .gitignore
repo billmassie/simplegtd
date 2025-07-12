@@ -84,7 +84,9 @@ dist
 
 # Gatsby files
 .cache/
-public
+
+# Frontend build output (will be copied to backend/public during build)
+frontend/public/
 
 # Storybook build outputs
 .out

@@ -30,11 +30,14 @@ else
     exit 1
 fi
 
-# Install PHP dependencies if needed
-if [ -f "backend/composer.json" ]; then
+# Install PHP dependencies if needed (only if composer is available)
+if [ -f "backend/composer.json" ] && command -v composer &> /dev/null; then
+    echo "📦 Installing PHP dependencies with Composer..."
     cd backend
     composer install --no-dev --optimize-autoloader
     cd ..
+elif [ -f "backend/composer.json" ]; then
+    echo "⚠️ Composer not available, skipping PHP dependencies"
 fi
 
 echo "🗄️ Setting up database schema..."

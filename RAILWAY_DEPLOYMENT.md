@@ -52,10 +52,14 @@ This guide will help you deploy your Task List Application to Railway with both 
    - Go to your project settings
    - Add these variables:
    ```
+   # Database Configuration (Railway will provide these)
    DB_HOST=your-mysql-host
    DB_NAME=your-database-name
    DB_USER=your-database-user
    DB_PASS=your-database-password
+   
+   # CORS Configuration (for same-domain deployment)
+   ALLOWED_ORIGIN=https://your-app.railway.app
    ```
 
 ### **Step 4: Configure API URLs**

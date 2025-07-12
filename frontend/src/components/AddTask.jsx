@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_ENDPOINTS } from '../config/api';
 
 function AddTask({ onTaskAdded }) {
     const [title, setTitle] = useState('');
@@ -13,7 +14,7 @@ function AddTask({ onTaskAdded }) {
         setError(null);
 
         try {
-            const response = await fetch('http://localhost:8000/api/tasks.php', {
+            const response = await fetch(API_ENDPOINTS.TASKS, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

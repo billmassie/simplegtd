@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import EditableOverlay from './EditableOverlay';
 import FormattedText from './FormattedText';
 import MarkdownText from './MarkdownText';
+import { API_ENDPOINTS } from '../config/api';
 
 function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
     const [task, setTask] = useState(null);
@@ -18,7 +19,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
         setLoading(true);
         try {
             // Fetch task details
-            const taskResponse = await fetch(`http://localhost:8000/api/tasks.php`);
+            const taskResponse = await fetch(API_ENDPOINTS.TASKS);
             if (!taskResponse.ok) {
                 throw new Error('Failed to fetch task');
             }
@@ -30,7 +31,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
             setTask(currentTask);
 
             // Fetch completed steps
-            const stepsResponse = await fetch(`http://localhost:8000/api/completed_steps.php`);
+            const stepsResponse = await fetch(API_ENDPOINTS.COMPLETED_STEPS);
             if (!stepsResponse.ok) {
                 throw new Error('Failed to fetch completed steps');
             }

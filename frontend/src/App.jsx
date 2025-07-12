@@ -4,6 +4,7 @@ import EditableOverlay from './components/EditableOverlay'
 import SingleTaskView from './components/SingleTaskView'
 import FormattedText from './components/FormattedText'
 import MarkdownText from './components/MarkdownText'
+import { API_ENDPOINTS } from './config/api'
 import './App.css'
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
 
     const fetchTasks = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/tasks.php');
+            const response = await fetch(API_ENDPOINTS.TASKS);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -74,7 +75,7 @@ function App() {
 
     const handlePriorityChange = async (taskId, newPriority) => {
         try {
-            const response = await fetch('http://localhost:8000/api/tasks.php', {
+            const response = await fetch(API_ENDPOINTS.TASKS, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -99,7 +100,7 @@ function App() {
 
     const handleStatusChange = async (taskId, newStatus) => {
         try {
-            const response = await fetch('http://localhost:8000/api/tasks.php', {
+            const response = await fetch(API_ENDPOINTS.TASKS, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

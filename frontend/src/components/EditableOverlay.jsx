@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import MarkdownText from './MarkdownText';
+import { API_ENDPOINTS } from '../config/api';
 
 function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, taskId }) {
     const [value, setValue] = useState(initialValue || '');
@@ -20,7 +21,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
 
         setIsSaving(true);
         try {
-            const response = await fetch('http://localhost:8000/api/tasks.php', {
+            const response = await fetch(API_ENDPOINTS.TASKS, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
         setIsMarkingDone(true);
         try {
             // First, add the step to completed_steps
-            const stepResponse = await fetch('http://localhost:8000/api/completed_steps.php', {
+            const stepResponse = await fetch(API_ENDPOINTS.COMPLETED_STEPS, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +72,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
             }
 
             // Then, clear the next_step field
-            const taskResponse = await fetch('http://localhost:8000/api/tasks.php', {
+            const taskResponse = await fetch(API_ENDPOINTS.TASKS, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["php", "phpPackages.mysql"]
+nixPkgs = ["php"]
 
 [phases.install]
 cmds = ["./railway-build.sh"]

@@ -30,6 +30,17 @@ else
     exit 1
 fi
 
+# Check for MySQL extension
+if php -m | grep -q mysql; then
+    echo "✅ MySQL extension is available"
+elif php -m | grep -q pdo_mysql; then
+    echo "✅ PDO MySQL extension is available"
+else
+    echo "⚠️ MySQL extension not found. Available extensions:"
+    php -m
+    echo "⚠️ This might cause database connection issues"
+fi
+
 # Install PHP dependencies if needed (only if composer is available)
 if [ -f "backend/composer.json" ] && command -v composer &> /dev/null; then
     echo "📦 Installing PHP dependencies with Composer..."

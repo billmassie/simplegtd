@@ -5,4 +5,4 @@ nixPkgs = ["php"]
 cmds = ["./railway-build.sh"]
 
 [start]
-cmd = "php -S 0.0.0.0:$PORT -t backend/public" 
+cmd = "./start.sh" 

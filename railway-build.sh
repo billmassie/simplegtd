@@ -51,10 +51,15 @@ elif [ -f "backend/composer.json" ]; then
     echo "⚠️ Composer not available, skipping PHP dependencies"
 fi
 
-echo "🗄️ Setting up database schema..."
-# Run database setup script
+echo "🗄️ Attempting database setup..."
+# Try to run database setup script, but don't fail if it doesn't work
 if [ -f "db/setup-database.php" ]; then
-    php db/setup-database.php
+    if php db/setup-database.php; then
+        echo "✅ Database setup completed successfully"
+    else
+        echo "⚠️ Database setup failed (this is normal during build phase)"
+        echo "ℹ️  Database will be set up when the app starts with proper environment variables"
+    fi
 fi
 
 echo "✅ Railway build complete!" 

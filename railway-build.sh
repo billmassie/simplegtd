@@ -2,6 +2,10 @@
 
 echo "🔧 Railway build process starting..."
 
+# Make sure we're in the right directory
+pwd
+ls -la
+
 # Install Node.js dependencies and build frontend
 echo "📦 Installing frontend dependencies..."
 cd frontend
@@ -18,6 +22,14 @@ cp -r dist/* ../backend/public/
 cd ..
 
 echo "🐘 Setting up PHP environment..."
+# Check if PHP is available
+if command -v php &> /dev/null; then
+    echo "✅ PHP is available: $(php --version)"
+else
+    echo "❌ PHP is not available"
+    exit 1
+fi
+
 # Install PHP dependencies if needed
 if [ -f "backend/composer.json" ]; then
     cd backend

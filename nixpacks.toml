@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["php", "phpPackages.mysql", "composer"]
+
+[phases.install]
+cmds = ["./railway-build.sh"]
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t backend/public" 

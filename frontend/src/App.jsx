@@ -468,7 +468,6 @@ function App() {
                     background-color: #e9ecef;
                 }
                 .next-step-content {
-                    white-space: pre-wrap;
                     word-wrap: break-word;
                     max-width: 300px;
                 }

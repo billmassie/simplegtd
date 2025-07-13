@@ -234,7 +234,7 @@ function App() {
                                 >
                                     {task.next_step ? (
                                         <div className="next-step-content">
-                                            <FormattedText text={task.next_step} />
+                                            <MarkdownText text={task.next_step} />
                                         </div>
                                     ) : (
                                         <span className="placeholder">Click to add next step...</span>
@@ -244,7 +244,7 @@ function App() {
                                     {task.last_step_description ? (
                                         <div className="last-step-content">
                                             <div className="last-step-text">
-                                                <FormattedText text={task.last_step_description} />
+                                                <MarkdownText text={task.last_step_description} />
                                             </div>
                                             <div className="last-step-date">
                                                 {new Date(task.last_step_completed_at).toLocaleDateString()}
@@ -520,6 +520,42 @@ function App() {
                     padding-left: 1em;
                 }
                 .milestones-content .markdown-content li {
+                    margin: 0.1em 0;
+                }
+                .next-step-content .markdown-content {
+                    font-size: 0.9em;
+                    line-height: 1.4;
+                }
+                .next-step-content .markdown-content h1,
+                .next-step-content .markdown-content h2,
+                .next-step-content .markdown-content h3 {
+                    margin: 0.2em 0;
+                    font-size: 1em;
+                }
+                .next-step-content .markdown-content ul,
+                .next-step-content .markdown-content ol {
+                    margin: 0.2em 0;
+                    padding-left: 1em;
+                }
+                .next-step-content .markdown-content li {
+                    margin: 0.1em 0;
+                }
+                .last-step-content .markdown-content {
+                    font-size: 0.9em;
+                    line-height: 1.4;
+                }
+                .last-step-content .markdown-content h1,
+                .last-step-content .markdown-content h2,
+                .last-step-content .markdown-content h3 {
+                    margin: 0.2em 0;
+                    font-size: 1em;
+                }
+                .last-step-content .markdown-content ul,
+                .last-step-content .markdown-content ol {
+                    margin: 0.2em 0;
+                    padding-left: 1em;
+                }
+                .last-step-content .markdown-content li {
                     margin: 0.1em 0;
                 }
             `}</style>

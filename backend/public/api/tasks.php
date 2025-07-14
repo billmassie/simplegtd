@@ -25,13 +25,13 @@ function debug_log($message) {
 debug_log("Request received at " . date('Y-m-d H:i:s'));
 
 // Database connection - use environment variables with fallbacks for local development
-$host = $_ENV['MYSQLHOST'] ?? 'localhost';
-$dbname = $_ENV['MYSQLDATABASE'] ?? 'tasklistapp';
-$username = $_ENV['MYSQLUSER'] ?? 'root';
-$password = $_ENV['MYSQLPASSWORD'] ?? ''; // empty password for local development
+$dbhost = getenv('MYSQLHOST') ?? 'localhost';
+$dbname = getenv('MYSQLDATABASE') ?? 'tasklistapp';
+$dbuser = getenv('MYSQLUSER') ?? 'root';
+$dbpassword = getenv('MYSQLPASSWORD') ?? '';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpassword);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     debug_log("Database connection successful");
 

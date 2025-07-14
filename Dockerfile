@@ -14,11 +14,11 @@ COPY . .
 # Install and build React app
 RUN cd frontend && npm install && npm run build
 
-# Move built frontend into Apache root
-RUN cp -r frontend/dist/* /var/www/html/
+# Copy only the API directory from backend (not index.php)
+RUN cp -r backend/public/api /var/www/html/
 
-# Copy backend files to Apache root
-RUN cp -r backend/public/* /var/www/html/
+# Move built React frontend into Apache root
+RUN cp -r frontend/dist/* /var/www/html/
 
 # Expose the default web port
 EXPOSE 80

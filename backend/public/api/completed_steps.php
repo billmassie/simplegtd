@@ -25,10 +25,10 @@ function debug_log($message) {
 debug_log("Completed steps request received at " . date('Y-m-d H:i:s'));
 
 // Database connection - use environment variables with fallbacks for local development
-$host = $_ENV['DB_HOST'] ?? 'localhost';
-$dbname = $_ENV['DB_NAME'] ?? 'tasklistapp';
-$username = $_ENV['DB_USER'] ?? 'root';
-$password = $_ENV['DB_PASS'] ?? ''; // empty password for local development
+$host = $_ENV['MYSQLHOST'] ?? 'localhost';
+$dbname = $_ENV['MYSQLDATABASE'] ?? 'tasklistapp';
+$username = $_ENV['MYSQLUSER'] ?? 'root';
+$password = $_ENV['MYSQLPASSWORD'] ?? ''; // empty password for local development
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

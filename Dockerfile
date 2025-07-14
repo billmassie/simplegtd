@@ -14,7 +14,7 @@ COPY . .
 # Install and build React app
 RUN cd frontend && npm install && npm run build
 
-# Copy only the API directory from backend (not index.php)
+# Copy only the API directory from backend 
 RUN cp -r backend/public/api /var/www/html/
 
 # Move built React frontend into Apache root

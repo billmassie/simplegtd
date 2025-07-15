@@ -478,7 +478,6 @@ function App() {
                     max-width: 300px;
                 }
                 .last-step-text {
-                    white-space: pre-wrap;
                     word-wrap: break-word;
                     margin-bottom: 4px;
                 }

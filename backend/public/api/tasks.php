@@ -31,11 +31,6 @@ $dbname = getenv('MYSQLDATABASE') ?: 'tasklistapp';
 $dbuser = getenv('MYSQLUSER') ?: 'root';
 $dbpassword = getenv('MYSQLPASSWORD') ?: '';
 
-debug_log("MYSQLHOST: " . $dbhost);
-debug_log("MYSQLDATABASE: " . $dbname);
-debug_log("MYSQLUSER: " . $dbuser);
-debug_log("MYSQLPASSWORD: " . $dbpassword);
-
 try {
     $pdo = new PDO("mysql:host=$dbhost;dbname=$dbname", "$dbuser", "$dbpassword");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

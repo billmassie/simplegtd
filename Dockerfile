@@ -11,6 +11,14 @@ WORKDIR /var/www/html
 # Copy everything in
 COPY . .
 
+# Create .htpasswd from the railway secret
+# RUN echo "$HTPASSWD_B64" | base64 -d > /etc/apache2/.htpasswd
+ARG HTPASSWD_B64
+RUN echo $HTPASSWD_B64 | base64 -d > /etc/apache2/.htpasswd && cat /etc/apache2/.htpasswd
+
+RUN chmod 640 /etc/apache2/.htpasswd
+RUN chown www-data:www-data /etc/apache2/.htpasswd
+
 # Install and build React app
 RUN cd frontend && npm install && npm run build
 

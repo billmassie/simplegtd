@@ -179,6 +179,20 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                         )}
                     </div>
                 </div>
+
+                {/* Notes section */}
+                <div className="task-section">
+                    <h2>Notes</h2>
+                    <div className="notes-display" onClick={() => handleEditField('notes', task.notes)}>
+                        {task.notes ? (
+                            <div className="notes-content">
+                                <MarkdownText text={task.notes} />
+                            </div>
+                        ) : (
+                            <span className="placeholder">Click to add notes...</span>
+                        )}
+                    </div>
+                </div>
             </div>
 
             <EditableOverlay
@@ -309,6 +323,21 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     word-wrap: break-word;
                 }
                 .milestones-content {
+                    max-height: 400px;
+                    overflow-y: auto;
+                }
+                .notes-display {
+                    cursor: pointer;
+                    background: white;
+                    border: 1px solid #dee2e6;
+                    border-radius: 4px;
+                    padding: 15px;
+                    transition: border-color 0.2s;
+                }
+                .notes-display:hover {
+                    border-color: #007bff;
+                }
+                .notes-content {
                     max-height: 400px;
                     overflow-y: auto;
                 }

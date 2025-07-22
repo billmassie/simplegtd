@@ -86,6 +86,12 @@ try {
                 $stmt = $pdo->prepare('UPDATE tasks SET milestones = ? WHERE task_id = ?');
                 $stmt->execute([$milestones, $taskId]);
             }
+            // Add support for notes
+            if (isset($data['notes'])) {
+                $notes = $data['notes'];
+                $stmt = $pdo->prepare('UPDATE tasks SET notes = ? WHERE task_id = ?');
+                $stmt->execute([$notes, $taskId]);
+            }
 
             echo json_encode($task);
             break;
@@ -123,6 +129,11 @@ try {
             if (array_key_exists('milestones', $data)) {
                 $updates[] = 'milestones = ?';
                 $params[] = $data['milestones'];
+            }
+            // Add support for notes
+            if (array_key_exists('notes', $data)) {
+                $updates[] = 'notes = ?';
+                $params[] = $data['notes'];
             }
 
             if (empty($updates)) {

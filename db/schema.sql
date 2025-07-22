@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     priority ENUM('high', 'medium', 'low') DEFAULT 'medium',
     next_step TEXT,
     milestones TEXT,
+    notes TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

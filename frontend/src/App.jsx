@@ -20,6 +20,8 @@ function App() {
         cancelled: false
     });
 
+    const environment = import.meta.env.ENVIRONMENT || 'development';
+
     const fetchTasks = async () => {
         try {
             const response = await fetch(API_ENDPOINTS.TASKS);
@@ -38,6 +40,14 @@ function App() {
     useEffect(() => {
         fetchTasks();
     }, []);
+
+    useEffect(() => {
+        if (environment === 'development') {
+            document.title = "DEV: Bill's Amazing GTD...";
+        } else {
+            document.title = "Bill's Amazing GTD...";
+        }
+    }, [environment]);
 
     const handleTaskAdded = (newTask) => {
         setTasks(prevTasks => [newTask, ...prevTasks]);
@@ -152,7 +162,17 @@ function App() {
 
     return (
         <div className="app">
-            <h1>Task List App</h1>
+            <header className="app-header">
+                <h1>
+                    {environment === 'development' ? (
+                        <>
+                            <span style={{ color: 'red' }}>DEV</span> Task List App
+                        </>
+                    ) : (
+                        'Task List App'
+                    )}
+                </h1>
+            </header>
             <AddTask onTaskAdded={handleTaskAdded} />
             
             {error && <div className="error">{error}</div>}
@@ -303,6 +323,15 @@ function App() {
                     max-width: 1200px;
                     margin: 0 auto;
                     padding: 20px;
+                }
+                .app-header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .app-header h1 {
+                    margin: 0;
+                    font-size: 2.5em;
+                    color: #333;
                 }
                 .tasks-list {
                     margin-top: 20px;

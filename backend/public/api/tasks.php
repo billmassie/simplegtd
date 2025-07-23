@@ -31,6 +31,10 @@ $dbname = getenv('MYSQLDATABASE') ?: 'tasklistapp';
 $dbuser = getenv('MYSQLUSER') ?: 'root';
 $dbpassword = getenv('MYSQLPASSWORD') ?: '';
 
+$environment = getenv('ENVIRONMENT') ?: 'development';
+debug_log("Environment: " . $environment);
+
+
 try {
     $pdo = new PDO("mysql:host=$dbhost;dbname=$dbname", "$dbuser", "$dbpassword");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

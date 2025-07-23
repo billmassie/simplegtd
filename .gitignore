@@ -91,7 +91,8 @@ dist
 .cache/
 
 # Frontend build output (will be copied to backend/public during build)
-frontend/public/
+# Commented out to allow static assets to be tracked
+# frontend/public/
 
 # Storybook build outputs
 .out

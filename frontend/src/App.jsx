@@ -19,8 +19,21 @@ function App() {
         done: false,
         cancelled: false
     });
+    const [environment, setEnvironment] = useState('development');
 
-    const environment = import.meta.env.ENVIRONMENT || 'development';
+    useEffect(() => {
+        fetch('/api/environment.php')
+            .then(res => res.json())
+            .then(data => setEnvironment(data.environment || 'development'));
+    }, []);
+
+    useEffect(() => {
+        if (environment === 'development') {
+            document.title = "DEV: Bill's Amazing GTD...";
+        } else {
+            document.title = "Bill's Amazing GTD...";
+        }
+    }, [environment]);
 
     const fetchTasks = async () => {
         try {
@@ -40,14 +53,6 @@ function App() {
     useEffect(() => {
         fetchTasks();
     }, []);
-
-    useEffect(() => {
-        if (environment === 'development') {
-            document.title = "DEV: Bill's Amazing GTD...";
-        } else {
-            document.title = "Bill's Amazing GTD...";
-        }
-    }, [environment]);
 
     const handleTaskAdded = (newTask) => {
         setTasks(prevTasks => [newTask, ...prevTasks]);

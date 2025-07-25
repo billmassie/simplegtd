@@ -72,8 +72,10 @@ try {
             }
 
             // Insert new task
-            $stmt = $pdo->prepare('INSERT INTO tasks (title) VALUES (?)');
-            $stmt->execute([trim($data['title'])]);
+            $priority = $data['priority'] ?? 'medium';
+            $status = $data['status'] ?? 'active';
+            $stmt = $pdo->prepare('INSERT INTO tasks (title, priority, status) VALUES (?, ?, ?)');
+            $stmt->execute([trim($data['title']), $priority, $status]);
 
             // Get the inserted task
             $taskId = $pdo->lastInsertId();

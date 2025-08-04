@@ -206,7 +206,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .overlay-backdrop {
                     position: fixed;
                     top: 0;

@@ -36,7 +36,7 @@ function MarkdownText({ text }) {
                 {text}
             </ReactMarkdown>
 
-            <style jsx>{`
+            <style>{`
                 .markdown-content {
                     line-height: 1.6;
                 }

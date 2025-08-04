@@ -62,7 +62,7 @@ function AddTask({ onTaskAdded }) {
                 {error && <div className="error-message">{error}</div>}
             </form>
 
-            <style jsx>{`
+            <style>{`
                 .add-task {
                     margin: 20px 0;
                     padding: 20px;

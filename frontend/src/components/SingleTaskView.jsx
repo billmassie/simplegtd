@@ -204,7 +204,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 taskId={taskId}
             />
 
-            <style jsx>{`
+            <style>{`
                 .single-task-view {
                     max-width: 800px;
                     margin: 0 auto;

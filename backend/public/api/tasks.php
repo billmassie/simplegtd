@@ -96,6 +96,13 @@ try {
                 $stmt->execute([$notes, $taskId]);
             }
 
+            // Add support for project_id
+            if (isset($data['project_id'])) {
+                $project_id = $data['project_id'];
+                $stmt = $pdo->prepare('UPDATE tasks SET project_id = ? WHERE task_id = ?');
+                $stmt->execute([$project_id, $taskId]);
+            }
+
             echo json_encode($task);
             break;
 
@@ -137,6 +144,11 @@ try {
             if (array_key_exists('notes', $data)) {
                 $updates[] = 'notes = ?';
                 $params[] = $data['notes'];
+            }
+
+            if (array_key_exists('project_id', $data)) {
+                $updates[] = 'project_id = ?';
+                $params[] = $data['project_id'];
             }
 
             if (empty($updates)) {

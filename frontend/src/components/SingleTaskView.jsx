@@ -6,6 +6,7 @@ import { API_ENDPOINTS } from '../config/api';
 
 function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
     const [task, setTask] = useState(null);
+    const [projects, setProjects] = useState([]);
     const [completedSteps, setCompletedSteps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,9 +16,25 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
         fetchTaskData();
     }, [taskId]);
 
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/api/projects.php');
+            if (!response.ok) {
+                throw new Error('Failed to fetch projects');
+            }
+            const projectsData = await response.json();
+            setProjects(projectsData);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
     const fetchTaskData = async () => {
         setLoading(true);
         try {
+            // Fetch projects first
+            await fetchProjects();
+
             // Fetch task details
             const taskResponse = await fetch(API_ENDPOINTS.TASKS);
             if (!taskResponse.ok) {
@@ -61,6 +78,32 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
     const handleSaveEdit = (updatedTask) => {
         setTask(updatedTask);
         onTaskUpdated(updatedTask);
+    };
+
+    const handleProjectChange = async (newProjectId) => {
+        try {
+            const response = await fetch(API_ENDPOINTS.TASKS, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    task_id: taskId,
+                    project_id: newProjectId
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update project');
+            }
+
+            const updatedTask = await response.json();
+            setTask(updatedTask);
+            onTaskUpdated(updatedTask);
+        } catch (error) {
+            console.error('Error updating project:', error);
+            alert('Failed to update project');
+        }
     };
 
     if (loading) {
@@ -116,6 +159,22 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                         <div className="task-field">
                             <label>Status:</label>
                             <div className={`task-value status-${task.status}`}>{task.status}</div>
+                        </div>
+                        <div className="task-field">
+                            <label>Project:</label>
+                            <div className="task-value">
+                                <select
+                                    value={task.project_id || 1}
+                                    onChange={(e) => handleProjectChange(parseInt(e.target.value))}
+                                    className="project-select"
+                                >
+                                    {projects.map(project => (
+                                        <option key={project.project_id} value={project.project_id}>
+                                            {project.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                         <div className="task-field">
                             <label>Created:</label>
@@ -296,6 +355,26 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 .status-paused { color: #ffc107; }
                 .status-done { color: #17a2b8; }
                 .status-cancelled { color: #dc3545; }
+                .project-name {
+                    background-color: #e9ecef;
+                    color: #495057;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+                .project-select {
+                    padding: 4px 8px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    background: white;
+                    cursor: pointer;
+                }
+                .project-select:focus {
+                    outline: none;
+                    border-color: #007bff;
+                }
                 .next-step-display {
                     cursor: pointer;
                     background: white;

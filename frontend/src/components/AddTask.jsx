@@ -1,10 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { API_ENDPOINTS } from '../config/api';
 
 function AddTask({ onTaskAdded }) {
     const [title, setTitle] = useState('');
+    const [projects, setProjects] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
+
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/api/projects.php');
+            if (!response.ok) {
+                throw new Error('Failed to fetch projects');
+            }
+            const projectsData = await response.json();
+            setProjects(projectsData);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,7 +38,7 @@ function AddTask({ onTaskAdded }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ title }),
+                body: JSON.stringify({ title, project_id: selectedProjectId }),
             });
 
             if (!response.ok) {
@@ -51,9 +70,21 @@ function AddTask({ onTaskAdded }) {
                         disabled={isSubmitting}
                         className="task-input"
                     />
+                    <select 
+                        className="task-dropdown"
+                        value={selectedProjectId || ''}
+                        onChange={(e) => setSelectedProjectId(e.target.value ? parseInt(e.target.value) : null)}
+                    >
+                        <option value="">Select Project</option>
+                        {projects.map(project => (
+                            <option key={project.project_id} value={project.project_id}>
+                                {project.name}
+                            </option>
+                        ))}
+                    </select>
                     <button 
                         type="submit" 
-                        disabled={isSubmitting || !title.trim()}
+                        disabled={isSubmitting || !title.trim() || !selectedProjectId}
                         className="submit-button"
                     >
                         {isSubmitting ? 'Adding...' : 'Add Task'}
@@ -99,6 +130,13 @@ function AddTask({ onTaskAdded }) {
                 .error-message {
                     color: #dc3545;
                     margin-top: 10px;
+                }
+                .task-dropdown {
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    font-size: 16px;
+                    background: white;
                 }
             `}</style>
         </div>

@@ -74,8 +74,10 @@ try {
             // Insert new task
             $priority = $data['priority'] ?? 'medium';
             $status = $data['status'] ?? 'active';
-            $stmt = $pdo->prepare('INSERT INTO tasks (title, priority, status) VALUES (?, ?, ?)');
-            $stmt->execute([trim($data['title']), $priority, $status]);
+            $project_id = $data['project_id'] ?? 1; // Default to first project if not specified
+            
+            $stmt = $pdo->prepare('INSERT INTO tasks (project_id, title, priority, status) VALUES (?, ?, ?, ?)');
+            $stmt->execute([$project_id, trim($data['title']), $priority, $status]);
 
             // Get the inserted task
             $taskId = $pdo->lastInsertId();
@@ -94,13 +96,6 @@ try {
                 $notes = $data['notes'];
                 $stmt = $pdo->prepare('UPDATE tasks SET notes = ? WHERE task_id = ?');
                 $stmt->execute([$notes, $taskId]);
-            }
-
-            // Add support for project_id
-            if (isset($data['project_id'])) {
-                $project_id = $data['project_id'];
-                $stmt = $pdo->prepare('UPDATE tasks SET project_id = ? WHERE task_id = ?');
-                $stmt->execute([$project_id, $taskId]);
             }
 
             echo json_encode($task);

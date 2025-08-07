@@ -9,9 +9,11 @@ import './App.css'
 
 function App() {
     const [tasks, setTasks] = useState([]);
+    const [projects, setProjects] = useState([]);
     const [error, setError] = useState(null);
     const [editingTask, setEditingTask] = useState(null);
     const [editingField, setEditingField] = useState(null);
+    const [selectedProjectId, setSelectedProjectId] = useState(null);
     const [selectedTaskId, setSelectedTaskId] = useState(null);
     const [statusFilters, setStatusFilters] = useState({
         active: true,
@@ -35,24 +37,40 @@ function App() {
         }
     }, [environment]);
 
+    const fetchProjects = async () => {
+        try {
+            const response = await fetch('/api/projects.php');
+            if (!response.ok) {
+                throw new Error('Failed to fetch projects');
+            }
+            const projectsData = await response.json();
+            setProjects(projectsData);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
+    };
+
     const fetchTasks = async () => {
         try {
             const response = await fetch(API_ENDPOINTS.TASKS);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('Failed to fetch tasks');
             }
-            const data = await response.json();
-            setTasks(data);
-            setError(null);
-        } catch (err) {
-            setError('Failed to fetch tasks: ' + err.message);
-            console.error('Error fetching tasks:', err);
+            const tasksData = await response.json();
+            setTasks(tasksData);
+        } catch (error) {
+            console.error('Error fetching tasks:', error);
         }
     };
 
     useEffect(() => {
+        fetchProjects();
         fetchTasks();
     }, []);
+
+    const handleProjectChange = (projectId) => {
+        setSelectedProjectId(projectId);
+    };
 
     const handleTaskAdded = (newTask) => {
         setTasks(prevTasks => [newTask, ...prevTasks]);
@@ -145,8 +163,12 @@ function App() {
         }));
     };
 
-    // Filter tasks based on selected statuses
-    const filteredTasks = tasks.filter(task => statusFilters[task.status]);
+    // Filter tasks based on selected statuses and project
+    const filteredTasks = tasks.filter(task => {
+        const statusMatch = statusFilters[task.status];
+        const projectMatch = !selectedProjectId || task.project_id === selectedProjectId;
+        return statusMatch && projectMatch;
+    });
 
     // Sort tasks by priority (high -> medium -> low)
     const sortedTasks = filteredTasks.sort((a, b) => {
@@ -185,6 +207,19 @@ function App() {
             <div className="status-filters">
                 <h3>Show Tasks:</h3>
                 <div className="filter-checkboxes">
+                    <div className="project-label">Project</div>
+                    <select 
+                        className="project-select"
+                        value={selectedProjectId || ''}
+                        onChange={(e) => handleProjectChange(e.target.value ? parseInt(e.target.value) : null)}
+                    >
+                        <option value="">Select Project</option>
+                        {projects.map(project => (
+                            <option key={project.project_id} value={project.project_id}>
+                                {project.name}
+                            </option>
+                        ))}
+                    </select>
                     <label className="filter-checkbox">
                         <input
                             type="checkbox"
@@ -379,10 +414,31 @@ function App() {
                     color: #333;
                     font-size: 16px;
                 }
+                .project-label {
+                    text-align: right;
+                    margin-bottom: 10px;
+                    font-weight: bold;
+                    color: #555;
+                }
                 .filter-checkboxes {
                     display: flex;
                     gap: 20px;
                     flex-wrap: wrap;
+                    align-items: center;
+                }
+                .project-label {
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    font-weight: bold;
+                    color: #555;
+                }
+                .project-select {
+                    padding: 4px 8px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    font-size: 14px;
+                    background: white;
                 }
                 .filter-checkbox {
                     display: flex;

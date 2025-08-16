@@ -195,7 +195,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     >
                         {task.next_step ? (
                             <div className="next-step-content">
-                                <FormattedText text={task.next_step} />
+                                <MarkdownText text={task.next_step} />
                             </div>
                         ) : (
                             <span className="placeholder">Click to add next step...</span>

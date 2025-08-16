@@ -16,6 +16,7 @@ function MarkdownText({ text }) {
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="markdown-link"
+                            onClick={(e) => e.stopPropagation()}
                         />
                     ),
                     // Customize code blocks
@@ -23,6 +24,32 @@ function MarkdownText({ text }) {
                         inline ? 
                         <code {...props} className="markdown-inline-code" /> :
                         <code {...props} className="markdown-code-block" />
+                    ),
+                    // Customize buttons to prevent event bubbling
+                    button: ({ node, ...props }) => (
+                        <button 
+                            {...props} 
+                            className="markdown-button"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    ),
+                    // Customize input fields to prevent event bubbling
+                    input: ({ node, ...props }) => (
+                        <input 
+                            {...props} 
+                            className="markdown-input"
+                            onClick={(e) => e.stopPropagation()}
+                            onFocus={(e) => e.stopPropagation()}
+                        />
+                    ),
+                    // Customize select elements to prevent event bubbling
+                    select: ({ node, ...props }) => (
+                        <select 
+                            {...props} 
+                            className="markdown-select"
+                            onClick={(e) => e.stopPropagation()}
+                            onFocus={(e) => e.stopPropagation()}
+                        />
                     ),
                     // Customize headings
                     h1: ({ node, ...props }) => <h1 {...props} className="markdown-h1" />,
@@ -132,6 +159,44 @@ function MarkdownText({ text }) {
                 .markdown-content .markdown-link:hover {
                     color: #0056b3;
                     text-decoration: none;
+                }
+                .markdown-content .markdown-button {
+                    background-color: #007bff;
+                    color: white;
+                    border: none;
+                    padding: 0.3em 0.6em;
+                    border-radius: 3px;
+                    cursor: pointer;
+                    font-size: 0.9em;
+                    margin: 0.2em 0.1em;
+                }
+                .markdown-content .markdown-button:hover {
+                    background-color: #0056b3;
+                }
+                .markdown-content .markdown-input {
+                    border: 1px solid #ddd;
+                    padding: 0.3em 0.5em;
+                    border-radius: 3px;
+                    font-size: 0.9em;
+                    margin: 0.2em 0.1em;
+                }
+                .markdown-content .markdown-input:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+                }
+                .markdown-content .markdown-select {
+                    border: 1px solid #ddd;
+                    padding: 0.3em 0.5em;
+                    border-radius: 3px;
+                    font-size: 0.9em;
+                    margin: 0.2em 0.1em;
+                    background-color: white;
+                }
+                .markdown-content .markdown-select:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
                 }
                 .markdown-content hr {
                     border: none;

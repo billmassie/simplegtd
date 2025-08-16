@@ -131,7 +131,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                             <option value="medium">Medium</option>
                             <option value="low">Low</option>
                         </select>
-                    ) : fieldName === 'milestones' ? (
+                    ) : (fieldName === 'milestones' || fieldName === 'next_step') ? (
                         <div className="markdown-editor">
                             <div className="markdown-toolbar">
                                 <button 

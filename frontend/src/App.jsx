@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AddTask from './components/AddTask'
 import EditableOverlay from './components/EditableOverlay'
 import SingleTaskView from './components/SingleTaskView'
@@ -22,6 +22,8 @@ function App() {
         cancelled: false
     });
     const [environment, setEnvironment] = useState('development');
+    const [newlyAddedTaskId, setNewlyAddedTaskId] = useState(null);
+    const taskRowRefs = useRef({});
 
     useEffect(() => {
         fetch('/api/environment.php')
@@ -74,6 +76,22 @@ function App() {
 
     const handleTaskAdded = (newTask) => {
         setTasks(prevTasks => [newTask, ...prevTasks]);
+        setNewlyAddedTaskId(newTask.task_id);
+        
+        // Scroll to the new task after a short delay to ensure DOM is updated
+        setTimeout(() => {
+            const taskRow = taskRowRefs.current[newTask.task_id];
+            if (taskRow) {
+                taskRow.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // Automatically open the next step overlay for the new task
+                setEditingTask(newTask.task_id);
+                setEditingField('next_step');
+            }
+        }, 100);
     };
 
     const handleTaskUpdated = (updatedTask) => {
@@ -92,6 +110,10 @@ function App() {
     const handleCloseEdit = () => {
         setEditingTask(null);
         setEditingField(null);
+        // Clear the newly added task flag when closing overlay
+        if (newlyAddedTaskId) {
+            setNewlyAddedTaskId(null);
+        }
     };
 
     const handleSaveEdit = (updatedTask) => {
@@ -187,6 +209,13 @@ function App() {
         );
     }
 
+    // Helper function to set ref for task rows
+    const setTaskRowRef = (taskId, element) => {
+        if (element) {
+            taskRowRefs.current[taskId] = element;
+        }
+    };
+
     return (
         <div className="app">
             <header className="app-header">
@@ -271,7 +300,11 @@ function App() {
                     </thead>
                     <tbody>
                         {sortedTasks.map(task => (
-                            <tr key={task.task_id}>
+                            <tr 
+                                key={task.task_id}
+                                ref={(el) => setTaskRowRef(task.task_id, el)}
+                                className={newlyAddedTaskId === task.task_id ? 'newly-added-task' : ''}
+                            >
                                 <td 
                                     className="task-id-cell"
                                     onClick={() => handleTaskClick(task.task_id)}
@@ -645,6 +678,27 @@ function App() {
                 }
                 .last-step-content .markdown-content li {
                     margin: 0.1em 0;
+                }
+                .newly-added-task {
+                    animation: highlightNewTask 2s ease-out;
+                    background-color: #d4edda !important;
+                }
+                @keyframes highlightNewTask {
+                    0% {
+                        background-color: #d4edda;
+                        transform: scale(1.02);
+                    }
+                    50% {
+                        background-color: #d4edda;
+                        transform: scale(1.01);
+                    }
+                    100% {
+                        background-color: inherit;
+                        transform: scale(1);
+                    }
+                }
+                tr:nth-child(even) .newly-added-task {
+                    background-color: #d4edda !important;
                 }
             `}</style>
         </div>

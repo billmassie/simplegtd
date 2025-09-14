@@ -373,6 +373,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                     background: #f8f9fa;
                     overflow-y: auto;
                     min-height: 0;
+                    text-align: left;
                 }
                 .markdown-input-container {
                     flex: 1;

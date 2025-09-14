@@ -11,6 +11,10 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [editingField, setEditingField] = useState(null);
+    const [milestonesExpanded, setMilestonesExpanded] = useState(true);
+    const [notesExpanded, setNotesExpanded] = useState(true);
+    const [nextStepExpanded, setNextStepExpanded] = useState(true);
+    const [completedStepsExpanded, setCompletedStepsExpanded] = useState(true);
 
     useEffect(() => {
         fetchTaskData();
@@ -188,69 +192,90 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 </div>
 
                 <div className="task-section">
-                    <h2>Next Step</h2>
-                    <div 
-                        className="next-step-display table-cell-style"
-                        onClick={() => handleEditField('next_step', task.next_step)}
-                    >
-                        {task.next_step ? (
-                            <div className="next-step-content">
-                                <MarkdownText text={task.next_step} />
-                            </div>
-                        ) : (
-                            <span className="placeholder">Click to add next step...</span>
-                        )}
-                    </div>
-                </div>
-
-                <div className="task-section">
-                    <h2>Completed Steps ({completedSteps.length})</h2>
-                    {completedSteps.length > 0 ? (
-                        <div className="completed-steps table-cell-style">
-                            {completedSteps.map((step, index) => (
-                                <div key={step.completed_step_id} className="completed-step">
-                                    <div className="step-header">
-                                        <span className="step-number">#{completedSteps.length - index}</span>
-                                        <span className="step-date">
-                                            {new Date(step.completed_at).toLocaleString()}
-                                        </span>
-                                    </div>
-                                    <div className="step-description">
-                                        <FormattedText text={step.description} />
-                                    </div>
+                    <h2 className="collapsible-header" onClick={() => setMilestonesExpanded(!milestonesExpanded)}>
+                        <span className="collapse-icon">{milestonesExpanded ? '▼' : '▶'}</span>
+                        Milestones
+                    </h2>
+                    {milestonesExpanded && (
+                        <div className="milestones-display table-cell-style" onClick={() => handleEditField('milestones', task.milestones)}>
+                            {task.milestones ? (
+                                <div className="milestones-content">
+                                    <MarkdownText text={task.milestones} />
                                 </div>
-                            ))}
+                            ) : (
+                                <span className="placeholder">Click to add milestones...</span>
+                            )}
                         </div>
-                    ) : (
-                        <div className="no-steps table-cell-style">No completed steps yet.</div>
                     )}
                 </div>
 
                 <div className="task-section">
-                    <h2>Milestones</h2>
-                    <div className="milestones-display table-cell-style" onClick={() => handleEditField('milestones', task.milestones)}>
-                        {task.milestones ? (
-                            <div className="milestones-content">
-                                <MarkdownText text={task.milestones} />
-                            </div>
-                        ) : (
-                            <span className="placeholder">Click to add milestones...</span>
-                        )}
-                    </div>
+                    <h2 className="collapsible-header" onClick={() => setNotesExpanded(!notesExpanded)}>
+                        <span className="collapse-icon">{notesExpanded ? '▼' : '▶'}</span>
+                        Notes
+                    </h2>
+                    {notesExpanded && (
+                        <div className="notes-display table-cell-style" onClick={() => handleEditField('notes', task.notes)}>
+                            {task.notes ? (
+                                <div className="notes-content">
+                                    <MarkdownText text={task.notes} />
+                                </div>
+                            ) : (
+                                <span className="placeholder">Click to add notes...</span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
-                {/* Notes section */}
                 <div className="task-section">
-                    <h2>Notes</h2>
-                    <div className="notes-display table-cell-style" onClick={() => handleEditField('notes', task.notes)}>
-                        {task.notes ? (
-                            <div className="notes-content">
-                                <MarkdownText text={task.notes} />
-                            </div>
-                        ) : (
-                            <span className="placeholder">Click to add notes...</span>
-                        )}
-                    </div>
+                    <h2 className="collapsible-header" onClick={() => setNextStepExpanded(!nextStepExpanded)}>
+                        <span className="collapse-icon">{nextStepExpanded ? '▼' : '▶'}</span>
+                        Next Step
+                    </h2>
+                    {nextStepExpanded && (
+                        <div 
+                            className="next-step-display table-cell-style"
+                            onClick={() => handleEditField('next_step', task.next_step)}
+                        >
+                            {task.next_step ? (
+                                <div className="next-step-content">
+                                    <MarkdownText text={task.next_step} />
+                                </div>
+                            ) : (
+                                <span className="placeholder">Click to add next step...</span>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                <div className="task-section">
+                    <h2 className="collapsible-header" onClick={() => setCompletedStepsExpanded(!completedStepsExpanded)}>
+                        <span className="collapse-icon">{completedStepsExpanded ? '▼' : '▶'}</span>
+                        Completed Steps ({completedSteps.length})
+                    </h2>
+                    {completedStepsExpanded && (
+                        <>
+                            {completedSteps.length > 0 ? (
+                                <div className="completed-steps table-cell-style">
+                                    {completedSteps.map((step, index) => (
+                                        <div key={step.completed_step_id} className="completed-step">
+                                            <div className="step-header">
+                                                <span className="step-number">#{completedSteps.length - index}</span>
+                                                <span className="step-date">
+                                                    {new Date(step.completed_at).toLocaleString()}
+                                                </span>
+                                            </div>
+                                            <div className="step-description">
+                                                <FormattedText text={step.description} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="no-steps table-cell-style">No completed steps yet.</div>
+                            )}
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -308,6 +333,25 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     color: #333;
                     border-bottom: 1px solid #dee2e6;
                     padding-bottom: 10px;
+                }
+                .collapsible-header {
+                    cursor: pointer;
+                    user-select: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    transition: color 0.2s;
+                }
+                .collapsible-header:hover {
+                    color: #007bff;
+                }
+                .collapse-icon {
+                    font-size: 12px;
+                    color: #666;
+                    transition: color 0.2s;
+                }
+                .collapsible-header:hover .collapse-icon {
+                    color: #007bff;
                 }
                 .task-info-table {
                     width: 100%;

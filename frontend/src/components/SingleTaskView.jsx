@@ -142,55 +142,55 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
             <div className="task-details">
                 <div className="task-section">
                     <h2>Task Information</h2>
-                    <div className="task-grid">
-                        <div className="task-field">
-                            <label>Title:</label>
-                            <div className="task-value">{task.title}</div>
-                        </div>
-                        <div className="task-field">
-                            <label>Priority:</label>
-                            <div 
-                                className={`task-value priority-${task.priority}`}
-                                onClick={() => handleEditField('priority', task.priority)}
-                            >
-                                {task.priority}
-                            </div>
-                        </div>
-                        <div className="task-field">
-                            <label>Status:</label>
-                            <div className={`task-value status-${task.status}`}>{task.status}</div>
-                        </div>
-                        <div className="task-field">
-                            <label>Project:</label>
-                            <div className="task-value">
-                                <select
-                                    value={task.project_id || 1}
-                                    onChange={(e) => handleProjectChange(parseInt(e.target.value))}
-                                    className="project-select"
-                                >
-                                    {projects.map(project => (
-                                        <option key={project.project_id} value={project.project_id}>
-                                            {project.name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        <div className="task-field">
-                            <label>Created:</label>
-                            <div className="task-value">{new Date(task.created_at).toLocaleString()}</div>
-                        </div>
-                        <div className="task-field">
-                            <label>Updated:</label>
-                            <div className="task-value">{new Date(task.updated_at).toLocaleString()}</div>
-                        </div>
-                    </div>
+                    <table className="task-info-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Project</th>
+                                <th>Created</th>
+                                <th>Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="info-value">{task.title}</td>
+                                <td className="info-value">
+                                    <span 
+                                        className={`priority-badge priority-${task.priority}`}
+                                        onClick={() => handleEditField('priority', task.priority)}
+                                    >
+                                        {task.priority}
+                                    </span>
+                                </td>
+                                <td className="info-value">
+                                    <span className={`status-badge status-${task.status}`}>{task.status}</span>
+                                </td>
+                                <td className="info-value">
+                                    <select
+                                        value={task.project_id || 1}
+                                        onChange={(e) => handleProjectChange(parseInt(e.target.value))}
+                                        className="project-select"
+                                    >
+                                        {projects.map(project => (
+                                            <option key={project.project_id} value={project.project_id}>
+                                                {project.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </td>
+                                <td className="info-value">{new Date(task.created_at).toLocaleString()}</td>
+                                <td className="info-value">{new Date(task.updated_at).toLocaleString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div className="task-section">
                     <h2>Next Step</h2>
                     <div 
-                        className="next-step-display"
+                        className="next-step-display table-cell-style"
                         onClick={() => handleEditField('next_step', task.next_step)}
                     >
                         {task.next_step ? (
@@ -206,7 +206,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 <div className="task-section">
                     <h2>Completed Steps ({completedSteps.length})</h2>
                     {completedSteps.length > 0 ? (
-                        <div className="completed-steps">
+                        <div className="completed-steps table-cell-style">
                             {completedSteps.map((step, index) => (
                                 <div key={step.completed_step_id} className="completed-step">
                                     <div className="step-header">
@@ -222,13 +222,13 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                             ))}
                         </div>
                     ) : (
-                        <div className="no-steps">No completed steps yet.</div>
+                        <div className="no-steps table-cell-style">No completed steps yet.</div>
                     )}
                 </div>
 
                 <div className="task-section">
                     <h2>Milestones</h2>
-                    <div className="milestones-display" onClick={() => handleEditField('milestones', task.milestones)}>
+                    <div className="milestones-display table-cell-style" onClick={() => handleEditField('milestones', task.milestones)}>
                         {task.milestones ? (
                             <div className="milestones-content">
                                 <MarkdownText text={task.milestones} />
@@ -242,7 +242,7 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 {/* Notes section */}
                 <div className="task-section">
                     <h2>Notes</h2>
-                    <div className="notes-display" onClick={() => handleEditField('notes', task.notes)}>
+                    <div className="notes-display table-cell-style" onClick={() => handleEditField('notes', task.notes)}>
                         {task.notes ? (
                             <div className="notes-content">
                                 <MarkdownText text={task.notes} />
@@ -309,52 +309,86 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     border-bottom: 1px solid #dee2e6;
                     padding-bottom: 10px;
                 }
-                .task-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 15px;
+                .task-info-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 10px;
+                    border: 1px solid #dee2e6;
                 }
-                .task-field {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5px;
-                }
-                .task-field label {
+                .task-info-table th {
+                    background-color: #f4f4f4;
+                    padding: 12px 8px;
+                    border-bottom: 1px solid #dee2e6;
+                    border-right: 1px solid #dee2e6;
                     font-weight: bold;
-                    color: #666;
+                    color: #333;
+                    font-size: 14px;
+                    text-align: left;
+                }
+                .task-info-table th:last-child {
+                    border-right: none;
+                }
+                .task-info-table td {
+                    padding: 12px 8px;
+                    border-bottom: 1px solid #dee2e6;
+                    border-right: 1px solid #dee2e6;
+                    vertical-align: middle;
+                }
+                .task-info-table td:last-child {
+                    border-right: none;
+                }
+                .task-info-table tr:last-child td {
+                    border-bottom: none;
+                }
+                .info-value {
+                    color: #333;
                     font-size: 14px;
                 }
-                .task-value {
-                    color: #333;
+                .priority-badge {
+                    display: inline-block;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-weight: bold;
+                    text-transform: capitalize;
+                    cursor: pointer;
+                    font-size: 12px;
                 }
-                .priority-high {
+                .priority-badge.priority-high {
                     background-color: #f8d7da;
                     color: #721c24;
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                    font-weight: bold;
-                    cursor: pointer;
                 }
-                .priority-medium {
+                .priority-badge.priority-medium {
                     background-color: #fff3cd;
                     color: #856404;
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                    font-weight: bold;
-                    cursor: pointer;
                 }
-                .priority-low {
+                .priority-badge.priority-low {
                     background-color: #d1ecf1;
                     color: #0c5460;
-                    padding: 2px 8px;
+                }
+                .status-badge {
+                    display: inline-block;
+                    padding: 4px 8px;
                     border-radius: 4px;
                     font-weight: bold;
-                    cursor: pointer;
+                    text-transform: capitalize;
+                    font-size: 12px;
                 }
-                .status-active { color: #28a745; }
-                .status-paused { color: #ffc107; }
-                .status-done { color: #17a2b8; }
-                .status-cancelled { color: #dc3545; }
+                .status-badge.status-active { 
+                    color: #28a745; 
+                    background-color: #d4edda;
+                }
+                .status-badge.status-paused { 
+                    color: #856404; 
+                    background-color: #fff3cd;
+                }
+                .status-badge.status-done { 
+                    color: #0c5460; 
+                    background-color: #d1ecf1;
+                }
+                .status-badge.status-cancelled { 
+                    color: #721c24; 
+                    background-color: #f8d7da;
+                }
                 .project-name {
                     background-color: #e9ecef;
                     color: #495057;
@@ -370,6 +404,8 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     font-size: 14px;
                     background: white;
                     cursor: pointer;
+                    width: 100%;
+                    max-width: 150px;
                 }
                 .project-select:focus {
                     outline: none;
@@ -386,6 +422,32 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 .next-step-display:hover {
                     border-color: #007bff;
                 }
+                .next-step-display.table-cell-style {
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 0;
+                    background-color: transparent;
+                    transition: background-color 0.2s;
+                    vertical-align: top;
+                    min-height: auto;
+                }
+                .next-step-display.table-cell-style:hover {
+                    background-color: #e9ecef;
+                    border-color: #ddd;
+                }
+                .table-cell-style {
+                    padding: 8px 12px;
+                    border: 1px solid #ddd;
+                    border-radius: 0;
+                    background-color: transparent;
+                    transition: background-color 0.2s;
+                    vertical-align: top;
+                    min-height: auto;
+                }
+                .table-cell-style:hover {
+                    background-color: #e9ecef;
+                    border-color: #ddd;
+                }
                 .milestones-display {
                     cursor: pointer;
                     background: white;
@@ -398,12 +460,50 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     border-color: #007bff;
                 }
                 .next-step-content {
-                    white-space: pre-wrap;
                     word-wrap: break-word;
+                    text-align: left;
+                }
+                .next-step-content .markdown-content {
+                    font-size: 0.9em;
+                    line-height: 1.4;
+                }
+                .next-step-content .markdown-content h1,
+                .next-step-content .markdown-content h2,
+                .next-step-content .markdown-content h3 {
+                    margin: 0.2em 0;
+                    font-size: 1em;
+                }
+                .next-step-content .markdown-content ul,
+                .next-step-content .markdown-content ol {
+                    margin: 0.2em 0;
+                    padding-left: 1em;
+                }
+                .next-step-content .markdown-content li {
+                    margin: 0.1em 0;
                 }
                 .milestones-content {
                     max-height: 400px;
                     overflow-y: auto;
+                    word-wrap: break-word;
+                    text-align: left;
+                }
+                .milestones-content .markdown-content {
+                    font-size: 0.9em;
+                    line-height: 1.4;
+                }
+                .milestones-content .markdown-content h1,
+                .milestones-content .markdown-content h2,
+                .milestones-content .markdown-content h3 {
+                    margin: 0.2em 0;
+                    font-size: 1em;
+                }
+                .milestones-content .markdown-content ul,
+                .milestones-content .markdown-content ol {
+                    margin: 0.2em 0;
+                    padding-left: 1em;
+                }
+                .milestones-content .markdown-content li {
+                    margin: 0.1em 0;
                 }
                 .notes-display {
                     cursor: pointer;
@@ -419,6 +519,26 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 .notes-content {
                     max-height: 400px;
                     overflow-y: auto;
+                    word-wrap: break-word;
+                    text-align: left;
+                }
+                .notes-content .markdown-content {
+                    font-size: 0.9em;
+                    line-height: 1.4;
+                }
+                .notes-content .markdown-content h1,
+                .notes-content .markdown-content h2,
+                .notes-content .markdown-content h3 {
+                    margin: 0.2em 0;
+                    font-size: 1em;
+                }
+                .notes-content .markdown-content ul,
+                .notes-content .markdown-content ol {
+                    margin: 0.2em 0;
+                    padding-left: 1em;
+                }
+                .notes-content .markdown-content li {
+                    margin: 0.1em 0;
                 }
                 .placeholder {
                     color: #6c757d;
@@ -428,6 +548,8 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                     display: flex;
                     flex-direction: column;
                     gap: 15px;
+                    word-wrap: break-word;
+                    text-align: left;
                 }
                 .completed-step {
                     background: white;
@@ -471,8 +593,8 @@ function SingleTaskView({ taskId, onBack, onTaskUpdated }) {
                 .no-steps {
                     color: #6c757d;
                     font-style: italic;
-                    text-align: center;
-                    padding: 20px;
+                    text-align: left;
+                    padding: 8px 12px;
                 }
                 .loading {
                     text-align: center;

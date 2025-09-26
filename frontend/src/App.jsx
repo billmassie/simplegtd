@@ -311,7 +311,12 @@ function App() {
                                 >
                                     {task.task_id}
                                 </td>
-                                <td>{task.title}</td>
+                                <td 
+                                    className="editable-cell"
+                                    onClick={() => handleEditField(task.task_id, 'title', task.title)}
+                                >
+                                    {task.title}
+                                </td>
                                 <td className="editable-cell" onClick={() => handleEditField(task.task_id, 'milestones', task.milestones)}>
                                     {task.milestones ? (
                                         <div className="milestones-content">
@@ -421,6 +426,16 @@ function App() {
                 }
                 th {
                     background-color: #f4f4f4;
+                }
+                th:nth-child(2), td:nth-child(2) {
+                    width: 200px;
+                    max-width: 200px;
+                }
+                th:nth-child(3), td:nth-child(3),
+                th:nth-child(4), td:nth-child(4),
+                th:nth-child(5), td:nth-child(5) {
+                    width: 350px;
+                    max-width: 350px;
                 }
                 tr:nth-child(even) {
                     background-color: #f0f0f0;
@@ -592,13 +607,17 @@ function App() {
                 }
                 .next-step-content {
                     word-wrap: break-word;
-                    max-width: 300px;
+                    max-width: 330px;
+                    max-height: 150px;
+                    overflow-y: auto;
                 }
                 .last-step-cell {
                     vertical-align: top;
                 }
                 .last-step-content {
-                    max-width: 300px;
+                    max-width: 330px;
+                    max-height: 150px;
+                    overflow-y: auto;
                 }
                 .last-step-text {
                     word-wrap: break-word;
@@ -622,8 +641,8 @@ function App() {
                     text-decoration: none;
                 }
                 .milestones-content {
-                    max-width: 300px;
-                    max-height: 200px;
+                    max-width: 330px;
+                    max-height: 150px;
                     overflow-y: auto;
                 }
                 .milestones-content .markdown-content {

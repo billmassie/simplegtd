@@ -131,6 +131,16 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                             <option value="medium">Medium</option>
                             <option value="low">Low</option>
                         </select>
+                    ) : fieldName === 'title' ? (
+                        <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            placeholder="Enter task title..."
+                            autoFocus
+                            className="edit-input"
+                        />
                     ) : (fieldName === 'milestones' || fieldName === 'next_step') ? (
                         <div className="markdown-editor">
                             <div className="markdown-toolbar">
@@ -292,6 +302,20 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                     background-color: white;
                 }
                 .edit-select:focus {
+                    outline: none;
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+                }
+                .edit-input {
+                    width: 100%;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    padding: 12px;
+                    font-size: 16px;
+                    font-family: inherit;
+                    box-sizing: border-box;
+                }
+                .edit-input:focus {
                     outline: none;
                     border-color: #007bff;
                     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);

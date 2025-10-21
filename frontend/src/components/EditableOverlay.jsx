@@ -110,6 +110,49 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
         }
     };
 
+    const handlePaste = (e) => {
+        const textarea = e.target;
+        const selectedText = textarea.value.substring(
+            textarea.selectionStart,
+            textarea.selectionEnd
+        );
+
+        // Only process if there's selected text
+        if (!selectedText) {
+            return; // Let default paste behavior happen
+        }
+
+        // Get the pasted content
+        const pastedText = e.clipboardData.getData('text');
+        
+        // Check if pasted content looks like a URL
+        const urlPattern = /^(https?:\/\/|www\.)[^\s]+$/i;
+        if (!urlPattern.test(pastedText.trim())) {
+            return; // Let default paste behavior happen
+        }
+
+        // Prevent default paste behavior
+        e.preventDefault();
+
+        // Create markdown link
+        const markdownLink = `[${selectedText}](${pastedText.trim()})`;
+
+        // Replace selected text with markdown link
+        const newValue = 
+            textarea.value.substring(0, textarea.selectionStart) +
+            markdownLink +
+            textarea.value.substring(textarea.selectionEnd);
+
+        setValue(newValue);
+
+        // Set cursor position after the inserted link
+        setTimeout(() => {
+            const newCursorPos = textarea.selectionStart + markdownLink.length;
+            textarea.setSelectionRange(newCursorPos, newCursorPos);
+            textarea.focus();
+        }, 0);
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -169,7 +212,8 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                                         value={value}
                                         onChange={(e) => setValue(e.target.value)}
                                         onKeyDown={handleKeyDown}
-                                        placeholder={`Enter ${fieldName.replace('_', ' ')}...\n\nMarkdown supported:\n• **bold** and *italic*\n• [links](url)\n• - bullet lists\n• 1. numbered lists\n• # headings\n• \`code\` and \`\`\`code blocks\`\`\``}
+                                        onPaste={handlePaste}
+                                        placeholder={`Enter ${fieldName.replace('_', ' ')}...\n\nMarkdown supported:\n• **bold** and *italic*\n• [links](url) - or select text and paste URL\n• - bullet lists\n• 1. numbered lists\n• # headings\n• \`code\` and \`\`\`code blocks\`\`\``}
                                         autoFocus
                                         rows={12}
                                         className="edit-textarea markdown-textarea"
@@ -182,6 +226,7 @@ function EditableOverlay({ isOpen, onClose, onSave, initialValue, fieldName, tas
                             value={value}
                             onChange={(e) => setValue(e.target.value)}
                             onKeyDown={handleKeyDown}
+                            onPaste={handlePaste}
                             placeholder={`Enter ${fieldName.replace('_', ' ')}...`}
                             autoFocus
                             rows={6}

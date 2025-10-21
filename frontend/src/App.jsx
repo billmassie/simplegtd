@@ -33,9 +33,9 @@ function App() {
 
     useEffect(() => {
         if (environment === 'development') {
-            document.title = "DEV: Bill's Amazing GTD...";
+            document.title = "DEV: BGTD";
         } else {
-            document.title = "Bill's Amazing GTD...";
+            document.title = "BGTD";
         }
     }, [environment]);
 
@@ -222,10 +222,10 @@ function App() {
                 <h1>
                     {environment === 'development' ? (
                         <>
-                            <span style={{ color: 'red' }}>DEV</span> Task List App
+                            <span style={{ color: 'red' }}>DEV</span> BGTD
                         </>
                     ) : (
-                        'Task List App'
+                        'BGTD'
                     )}
                 </h1>
             </header>
